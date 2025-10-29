@@ -34,7 +34,11 @@
 </div>
 <script crossorigin="anonymous">
 
-    let address = 'http://192.168.4.111:8100';
+    const laptopAdd = 'http://192.168.4.111';
+    const serverAdd = 'http://192.168.4.125';
+    const localhostAdd = 'http://localhost';
+
+    let address = localhostAdd +':8100';
 
     async function Counter()
     {
@@ -46,7 +50,7 @@
 
     async function ResetCounter()
     {
-        const res = await fetch('http://192.168.4.111:8100/reset');
+        const res = await fetch(address + '/reset');
         const data = await res.json();
         const count = document.getElementById('counter');
         count.textContent = data.value;
