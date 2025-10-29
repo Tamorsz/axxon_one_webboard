@@ -24,7 +24,7 @@
             <div class="card-header h1">Riasztás indítása</div>
             <div class="card-body row m-4">
                 <h5 class="h2 text-center col-md-6">Lépcső: </h5>
-                <button class="btn btn-warning col-md-6" onclick="StartAlarm()"><span class="h2">Riasztás</span></button>
+                <!--button class="btn btn-warning col-md-6" onclick="StartAlarm()"><span class="h2">Riasztás</span></button-->
             </div>
         </div>
     </div>
@@ -34,9 +34,11 @@
 </div>
 <script crossorigin="anonymous">
 
+    let address = 'http://192.168.4.111:8100';
+
     async function Counter()
     {
-        const res = await fetch('http://192.168.4.111:8100/counter');
+        const res = await fetch(address + '/counter');
         const data = await res.json();
         const count = document.getElementById('counter');
         count.textContent = data.value;
@@ -50,11 +52,6 @@
         count.textContent = data.value;
     }
 
-    async function StartAlarm()
-    {
-        const res = await fetch('http://192.168.4.111:8100/alarmlepcso');
-        const data = await res.json();
-    }
 
     setInterval(Counter, 1000);
 </script>

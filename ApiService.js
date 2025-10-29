@@ -27,6 +27,11 @@ app.post('/reset', (req, res) => {
     res.json({value: counter});
 });
 
+app.get('/reset', (req, res) => {
+    counter = 0;
+    res.json({value: counter});
+});
+
 
 // statikus fájlok (ha van public/)
 app.use(express.static('public'));
