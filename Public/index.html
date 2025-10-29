@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Macro lista</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        ul { list-style: none; padding: 0; }
+        li { margin: 5px 0; background: #f1f1f1; padding: 8px; border-radius: 6px; }
+    </style>
+</head>
+<body>
+<div class="grid grid-cols-2 gap-4">
+    <div class="row m-1 text-center">
+        <div class="card text-bg-primary col-md-6 text-center">
+            <div class="card-header h1">Vonalátlépések</div>
+            <div class="card-body row m-4">
+                <h5 class="h2 text-center col-md-6" id="counter">0</h5>
+                <button class="btn text-bg-danger col-md-6 " onclick="ResetCounter()"><span class="h2">RESET</span></button>
+            </div>
+        </div>
+        <div class="card text-bg-primary col-md-6 text-center" >
+            <div class="card-header h1">Riasztás indítása</div>
+            <div class="card-body row m-4">
+                <h5 class="h2 text-center col-md-6">Lépcső: </h5>
+                <button class="btn btn-warning col-md-6" onclick="StartAlarm()"><span class="h2">Riasztás</span></button>
+            </div>
+        </div>
+    </div>
+    <div class="row m-4">
+
+    </div>
+</div>
+<script crossorigin="anonymous">
+
+    async function Counter()
+    {
+        const res = await fetch('http://192.168.4.111:8100/counter');
+        const data = await res.json();
+        const count = document.getElementById('counter');
+        count.textContent = data.value;
+    }
+
+    async function ResetCounter()
+    {
+        const res = await fetch('http://192.168.4.111:8100/reset');
+        const data = await res.json();
+        const count = document.getElementById('counter');
+        count.textContent = data.value;
+    }
+
+    async function StartAlarm()
+    {
+        const res = await fetch('http://192.168.4.111:8100/alarmlepcso');
+        const data = await res.json();
+    }
+
+    setInterval(Counter, 1000);
+</script>
+</body>
+</html>
+
+
+<!--
+
+  async function loadMacros()
+    {
+        const res = await fetch('http://192.168.4.111:8100/macros');
+        const data = await res.json();
+        const list = document.getElementById('macros');
+        data.macroCommands.forEach(item =>
+        {
+            const p = document.createElement('tr');
+            const li = document.createElement('p');
+            li.textContent = 'Name: ' + item.name;
+            li.className = 'display-6'
+            li.style.color = 'red'
+            p.appendChild(li);
+            list.appendChild(p);
+        });
+    }
+
+    async function loadDetectors()
+    {
+        const res = await fetch('http://192.168.4.111:8100/detectors');
+        const data = await res.json();
+        const list = document.getElementById('detectors');
+        data.detectors.forEach(item =>
+        {
+            const p = document.createElement('tr');
+            const li = document.createElement('p');
+            li.textContent = 'Name: ' + item.type;
+            li.className = 'display-6'
+            li.style.color = 'blue'
+            p.appendChild(li);
+            list.appendChild(p);
+        });
+    }
+-->
