@@ -18,6 +18,8 @@
             <div class="card-body row m-4">
                 <h5 class="h2 text-center col-md-6" id="counter">0</h5>
                 <button class="btn text-bg-danger col-md-6 " onclick="ResetCounter()"><span class="h2">RESET</span></button>
+                <label for="CounterName"></label><input type="text" id="CounterName">
+                <button class="btn text-bg-danger col-md-6 " onclick="AddCounter()"><span class="h2">Add counter</span></button>
             </div>
         </div>
         <div class="card text-bg-primary col-md-6 text-center" >
@@ -35,8 +37,6 @@
 </div>
 <script crossorigin="anonymous">
 
-    const laptopAdd = 'http://192.168.4.111';
-    const serverAdd = 'http://192.168.4.125';
     const localhostAdd = 'http://localhost';
 
     let address = localhostAdd +':8100';
@@ -71,46 +71,14 @@
         const data = await res.json();
     }
 
+    async function AddCounter()
+    {
+        let name = document.getElementById('CounterName').value.trim();
+        const res = await fetch(address + '/counters/add/' + name, {method: 'POST'});
+    }
+
 
     setInterval(Counter, 1000);
 </script>
 </body>
 </html>
-
-
-<!--
-
-  async function loadMacros()
-    {
-        const res = await fetch('http://192.168.4.111:8100/macros');
-        const data = await res.json();
-        const list = document.getElementById('macros');
-        data.macroCommands.forEach(item =>
-        {
-            const p = document.createElement('tr');
-            const li = document.createElement('p');
-            li.textContent = 'Name: ' + item.name;
-            li.className = 'display-6'
-            li.style.color = 'red'
-            p.appendChild(li);
-            list.appendChild(p);
-        });
-    }
-
-    async function loadDetectors()
-    {
-        const res = await fetch('http://192.168.4.111:8100/detectors');
-        const data = await res.json();
-        const list = document.getElementById('detectors');
-        data.detectors.forEach(item =>
-        {
-            const p = document.createElement('tr');
-            const li = document.createElement('p');
-            li.textContent = 'Name: ' + item.type;
-            li.className = 'display-6'
-            li.style.color = 'blue'
-            p.appendChild(li);
-            list.appendChild(p);
-        });
-    }
--->
