@@ -8,29 +8,49 @@ app.use(cors());
 app.use(express.json());
 
 
-let counter = 0;
+let counters = {
+    customersCounter : 0,
+    tempCount : 0,
+};
 
-// Gives back the current value of counter
-app.get('/counter',(req, res) => {
-    res.json({value: counter});
+// Gives back the current value of customersCounter
+app.get('/counters',(req, res) => {
+    res.json({counters});
 });
 
-// Adds 1 to the counter
-app.post('/linecross', (req, res) => {
-    counter++;
-    res.json({value: counter});
+// Gives back the current value of customersCounter
+app.get('/counters/:name',(req, res) => {
+    name = req.params.name;
+    res.json({name,value: counters[name]});
 });
 
-// Set the counter to 0
-app.post('/reset', (req, res) => {
-    counter = 0;
-    res.json({value: counter});
+// Increase 1 to the customersCounter
+app.post('/increasecounter/:name', (req, res) => {
+    name = req.params.name;
+    counters[name]++;
+    res.json({success: true,value: counters[name]});
 });
 
+// Decrease 1 to the customersCounter
+app.post('/decreasecounter/:name', (req, res) => {
+    name = req.params.name;
+    counters[name]--;
+    res.json({success: true,value: counters[name]});
+});
+
+// Set the customersCounter to 0
+app.post('/reset/:name', (req, res) => {
+    name = req.params.name;
+    counters[name] = 0;
+    res.json({value: counters[name]});
+});
+
+/*
 app.get('/reset', (req, res) => {
-    counter = 0;
-    res.json({value: counter});
+    customersCounter = 0;
+    res.json({value: customersCounter});
 });
+*/
 
 
 // statikus fájlok (ha van public/)

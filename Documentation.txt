@@ -1,0 +1,10 @@
+AppService.js
+
+This file is written in javascript, using express.js on node.js.
+This file's job is to serve API to index.html.
+
+API request name - Type - Description
+ counter - Get - Gives back the value of the specified counter variable
+ increase-counter - Post - Increases the value of the specified counter variable
+ decrease-counter - Post - Decreases the value of the specified counter variable
+ reset - Post - Set the value of the specified counter variable to 0

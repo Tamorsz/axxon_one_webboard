@@ -14,7 +14,7 @@
 <div class="grid grid-cols-2 gap-4">
     <div class="row m-1 text-center">
         <div class="card text-bg-primary col-md-6 text-center">
-            <div class="card-header h1">Vonalátlépések</div>
+            <div class="card-header h1">Customers count</div>
             <div class="card-body row m-4">
                 <h5 class="h2 text-center col-md-6" id="counter">0</h5>
                 <button class="btn text-bg-danger col-md-6 " onclick="ResetCounter()"><span class="h2">RESET</span></button>
@@ -24,7 +24,8 @@
             <div class="card-header h1">Riasztás indítása</div>
             <div class="card-body row m-4">
                 <h5 class="h2 text-center col-md-6">Lépcső: </h5>
-                <!--button class="btn btn-warning col-md-6" onclick="StartAlarm()"><span class="h2">Riasztás</span></button-->
+                <button class="btn btn-warning col-md-6" onclick="IncreaseCounter()"><span class="h2">Increase</span></button>
+                <button class="btn btn-warning col-md-6" onclick="DecreaseCounter()"><span class="h2">Decrease</span></button>
             </div>
         </div>
     </div>
@@ -42,7 +43,7 @@
 
     async function Counter()
     {
-        const res = await fetch(address + '/counter');
+        const res = await fetch(address + '/counters/customersCounter');
         const data = await res.json();
         const count = document.getElementById('counter');
         count.textContent = data.value;
@@ -50,10 +51,24 @@
 
     async function ResetCounter()
     {
-        const res = await fetch(address + '/reset');
+        const res = await fetch(address + '/reset/customersCounter', { method: 'POST' });
         const data = await res.json();
-        const count = document.getElementById('counter');
-        count.textContent = data.value;
+        document.getElementById('counter').textContent = data.value;
+    }
+
+    async function IncreaseCounter() {
+        const res = await fetch(address + '/increasecounter/customersCounter', {method: 'POST'});
+        const data = await res.json();
+    }
+
+    async function DecreaseCounter()
+    {
+        const res = await fetch(address + '/decreasecounter/customersCounter',{
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({})
+        });
+        const data = await res.json();
     }
 
 
