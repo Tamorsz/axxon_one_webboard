@@ -1,4 +1,5 @@
 For the 2 service simultanius running, use the following command (have to install concurrently):
+    cd <the folder of the apps>
     concurrently "node ApiService.js" "npx serve -l 8110 ."
 
 AppService.js

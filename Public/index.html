@@ -17,7 +17,7 @@
             <div class="card-header h1">Customers count</div>
             <div class="card-body row m-4">
                 <h5 class="h2 text-center col-md-6" id="counter">0</h5>
-                <button class="btn text-bg-danger col-md-6 " onclick="ResetCounter()"><span class="h2">RESET</span></button>
+                <button class="btn text-bg-danger col-md-6 " onclick="ResetCounter('customersCounter')"><span class="h2">RESET</span></button>
                 <label for="CounterName"></label><input type="text" id="CounterName">
                 <button class="btn text-bg-danger col-md-6 " onclick="AddCounter()"><span class="h2">Add counter</span></button>
             </div>
@@ -26,8 +26,8 @@
             <div class="card-header h1">Riasztás indítása</div>
             <div class="card-body row m-4">
                 <h5 class="h2 text-center col-md-6">Lépcső: </h5>
-                <button class="btn btn-warning col-md-6" onclick="IncreaseCounter()"><span class="h2">Increase</span></button>
-                <button class="btn btn-warning col-md-6" onclick="DecreaseCounter()"><span class="h2">Decrease</span></button>
+                <button class="btn btn-warning col-md-6" onclick="IncreaseCounter('customersCounter')"><span class="h2">Increase</span></button>
+                <button class="btn btn-warning col-md-6" onclick="DecreaseCounter('customersCounter')"><span class="h2">Decrease</span></button>
             </div>
         </div>
     </div>
@@ -49,21 +49,21 @@
         count.textContent = data.value;
     }
 
-    async function ResetCounter()
+    async function ResetCounter(counterName)
     {
-        const res = await fetch(address + '/reset/customersCounter', { method: 'POST' });
+        const res = await fetch(address + `/reset/${counterName}`, { method: 'POST' });
         const data = await res.json();
         document.getElementById('counter').textContent = data.value;
     }
 
-    async function IncreaseCounter() {
-        const res = await fetch(address + '/increasecounter/customersCounter', {method: 'POST'});
+    async function IncreaseCounter(counterName) {
+        const res = await fetch(address + `/increasecounter/${counterName}`, {method: 'POST'});
         const data = await res.json();
     }
 
-    async function DecreaseCounter()
+    async function DecreaseCounter(counterName)
     {
-        const res = await fetch(address + '/decreasecounter/customersCounter',{
+        const res = await fetch(address + `/decreasecounter/${counterName}`,{
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({})
