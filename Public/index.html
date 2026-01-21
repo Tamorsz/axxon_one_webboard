@@ -2,7 +2,7 @@
 <html lang="hu">
 <head>
     <meta charset="UTF-8">
-    <title>Macro lista</title>
+    <title>Látogatók száma</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <style>
         body { font-family: Arial; padding: 20px; }
@@ -13,23 +13,14 @@
 <body>
 <div class="grid grid-cols-2 gap-4">
     <div class="row m-1 text-center">
-        <div class="card text-bg-primary col-md-6 text-center">
-            <div class="card-header h1">Customers count</div>
-            <div class="card-body row m-4">
-                <h5 class="h2 text-center col-md-6" id="counter">0</h5>
-                <button class="btn text-bg-danger col-md-6 " onclick="ResetCounter('customersCounter')"><span class="h2">RESET</span></button>
-                <label for="CounterName"></label><input type="text" id="CounterName">
-                <button class="btn text-bg-danger col-md-6 " onclick="AddCounter()"><span class="h2">Add counter</span></button>
+        <div class="card text-bg-primary col-md-12 text-center">
+            <div class="card-header h1">Látogatók száma</div>
+            <div class="card-body row m-4"  id="countersBody">
+                <h5 class="h2 text-center " id="counter">0</h5>
+<!--                <button class="btn text-bg-warning col-md-10" onclick="ExportCounter('customersCounter')"><span class="h2">Export</span></button> &ndash;&gt;-->
             </div>
         </div>
-        <div class="card text-bg-primary col-md-6 text-center" >
-            <div class="card-header h1">Riasztás indítása</div>
-            <div class="card-body row m-4">
-                <h5 class="h2 text-center col-md-6">Lépcső: </h5>
-                <button class="btn btn-warning col-md-6" onclick="IncreaseCounter('customersCounter')"><span class="h2">Increase</span></button>
-                <button class="btn btn-warning col-md-6" onclick="DecreaseCounter('customersCounter')"><span class="h2">Decrease</span></button>
-            </div>
-        </div>
+
     </div>
     <div class="row m-4">
 

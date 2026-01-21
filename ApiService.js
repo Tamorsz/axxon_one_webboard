@@ -21,7 +21,7 @@ function saveCounters() {
 }
 
 
-app.post('/counters/add/:name', (req, res) => {
+app.post('/counters/create/:name', (req, res) => {
     name = req.params.name;
     if(counters[name] !== undefined)
     {
