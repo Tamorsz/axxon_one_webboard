@@ -55,8 +55,24 @@ app.post('/increasecounter/:name', (req, res) => {
     res.json({success: true,value: counters[name]});
 });
 
+// Increase 1 to the customersCounter
+app.get('/increasecounter/:name', (req, res) => {
+    name = req.params.name;
+    counters[name]++;
+    saveCounters();
+    res.json({success: true,value: counters[name]});
+});
+
 // Decrease 1 to the customersCounter
 app.post('/decreasecounter/:name', (req, res) => {
+    name = req.params.name;
+    counters[name]--;
+    saveCounters();
+    res.json({success: true,value: counters[name]});
+});
+
+// Decrease 1 to the customersCounter
+app.get('/decreasecounter/:name', (req, res) => {
     name = req.params.name;
     counters[name]--;
     saveCounters();

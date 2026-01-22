@@ -8,7 +8,7 @@ async function Counter()
 {
     const res = await fetch(address + '/counters/customersCounter');
     const data = await res.json();
-    const count = document.getElementById(`counter${CountersNumberOnTheView}`);
+    const count = document.getElementById(`counter`);
     count.textContent = data.value;
 }
 
@@ -54,12 +54,12 @@ async function GetAllCounters()
 
 async function AddCounterToView(counter)
 {
-    await GetAllCounters();
-    /*let cardBody = document.getElementById('countersBody');
+   // await GetAllCounters();
+    let cardBody = document.getElementById('countersBody');
     let counterElement = document.createElement('H5');
     counterElement.textContent = counter.value;
     counterElement.id = 'counter';
-    cardBody.appendChild(counterElement);*/
+    cardBody.appendChild(counterElement);
 }
 
 setInterval(Counter, 1000);
