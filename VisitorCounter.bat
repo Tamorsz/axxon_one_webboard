@@ -1,1 +1,1 @@
-concurrently "node ApiService.js" "npx serve -l 8110 ."
+concurrently "node ApiService.js" "npx serve -l tcp://0.0.0.0:8110 ."
