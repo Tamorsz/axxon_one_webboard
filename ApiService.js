@@ -22,7 +22,7 @@ function saveCounters() {
 
 
 app.post('/counters/create/:name', (req, res) => {
-    name = req.params.name;
+    const name = req.params.name;
     if(counters[name] !== undefined)
     {
         res.json({success : true});
@@ -34,7 +34,7 @@ app.post('/counters/create/:name', (req, res) => {
         res.json({success : true});
 
     }
-})
+});
 
 // Gives back the current value of customersCounter
 app.get('/counters',(req, res) => {
@@ -43,13 +43,25 @@ app.get('/counters',(req, res) => {
 
 // Gives back the current value of customersCounter
 app.get('/counters/:name',(req, res) => {
-    name = req.params.name;
+    const name = req.params.name;
     res.json({name,value: counters[name]});
+});
+
+// Delete counter
+app.delete('/counters/delete/:name', (req, res) => {
+    const name = req.params.name;
+    if (counters[name] !== undefined) {
+        delete counters[name]; // Törlés az objektumból
+        saveCounters();        // Mentés a fájlba
+        res.sendStatus(204);
+    } else {
+        res.status(404).json({ success: false, message: "Nincs ilyen számláló." });
+    }
 });
 
 // Increase 1 to the customersCounter
 app.post('/increasecounter/:name', (req, res) => {
-    name = req.params.name;
+    const name = req.params.name;
     counters[name]++;
     saveCounters();
     res.json({success: true,value: counters[name]});
@@ -57,7 +69,7 @@ app.post('/increasecounter/:name', (req, res) => {
 
 // Increase 1 to the customersCounter
 app.get('/increasecounter/:name', (req, res) => {
-    name = req.params.name;
+    const name = req.params.name;
     counters[name]++;
     saveCounters();
     res.json({success: true,value: counters[name]});
@@ -65,7 +77,7 @@ app.get('/increasecounter/:name', (req, res) => {
 
 // Decrease 1 to the customersCounter
 app.post('/decreasecounter/:name', (req, res) => {
-    name = req.params.name;
+    const name = req.params.name;
     counters[name]--;
     saveCounters();
     res.json({success: true,value: counters[name]});
@@ -73,7 +85,7 @@ app.post('/decreasecounter/:name', (req, res) => {
 
 // Decrease 1 to the customersCounter
 app.get('/decreasecounter/:name', (req, res) => {
-    name = req.params.name;
+    const name = req.params.name;
     counters[name]--;
     saveCounters();
     res.json({success: true,value: counters[name]});
@@ -81,7 +93,7 @@ app.get('/decreasecounter/:name', (req, res) => {
 
 // Set the customersCounter to 0
 app.post('/reset/:name', (req, res) => {
-    name = req.params.name;
+    const name = req.params.name;
     counters[name] = 0;
     saveCounters();
     res.json({value: counters[name]});

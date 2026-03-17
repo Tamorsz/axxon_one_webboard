@@ -4,6 +4,8 @@ let address = localhostAdd +':8100';
 
 let CountersNumberOnTheView = 1;
 
+document.addEventListener("DOMContentLoaded", () => { AddCounterToView(); });
+
 async function Counter()
 {
     const data =await GetAllCounters();
@@ -47,6 +49,15 @@ async function CreateCounter()
 {
     let name = document.getElementById('CounterName').value.trim();
     const res = await fetch(address + '/counters/create/' + name, {method: 'POST'});
+    document.getElementById('CounterName').value = '';
+    await AddCounterToView();
+}
+async function DeleteCounter(counterName)
+{
+    let name = document.getElementById('CounterName').value.trim();
+    const res = await fetch(address + '/counters/delete/' + name, {method: 'DELETE'});
+    document.getElementById('CounterName').value = '';
+    await AddCounterToView();
 }
 
 async function GetAllCounters()
@@ -98,11 +109,13 @@ async function AddCounterToView()
 
 async function ClearView()
 {
-    const data = await GetAllCounters();
-    Object.entries(data.counters).forEach(([key, value]) => {
-        let cardBodyElement = document.getElementById(key+'Card');
-        cardBodyElement.remove();
-    })
+    let mainDiv = document.getElementById('MainDiv');
+
+    // Csak a generált kártyákat töröljük, a "Számlálók szerkesztése" részt NE!
+    // Ehhez érdemes a generált kártyáknak egy külön konténert adni a HTML-ben,
+    // vagy csak azokat a gyerekeket törölni, amiknek van 'card' osztálya.
+    const cards = mainDiv.querySelectorAll('.card.text-bg-primary');
+    cards.forEach(card => card.remove());
 }
 
 setInterval(Counter, 1000);
