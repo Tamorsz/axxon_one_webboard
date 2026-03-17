@@ -1,6 +1,6 @@
-const localhostAdd = 'http://localhost';
+const localhostAdd = window.location.hostname;
 
-let address = localhostAdd +':8100';
+let address = 'http://' + localhostAdd +':8100';
 
 let CountersNumberOnTheView = 1;
 
