@@ -8,16 +8,20 @@
         body { font-family: Arial; padding: 20px; }
         ul { list-style: none; padding: 0; }
         li { margin: 5px 0; background: #f1f1f1; padding: 8px; border-radius: 6px; }
+        div {margin: 5px;}
     </style>
 </head>
 <body>
 <div class="grid grid-cols-2 gap-4">
-    <div class="row m-1 text-center">
+    <div id="MainDiv" class="row m-1 text-center">
+
+
         <div class="card text-bg-primary col-md-12 text-center">
-            <div class="card-header h1">Látogatók száma</div>
-            <div class="card-body row m-4"  id="countersBody">
-                <h5 class="h2 text-center " id="counter">0</h5>
-<!--                <button class="btn text-bg-warning col-md-10" onclick="ExportCounter('customersCounter')"><span class="h2">Export</span></button> &ndash;&gt;-->
+            <div class="card-header h1">Számláló hozzáadása</div>
+            <div class="card-body row m-4">
+                <input id="CounterName" type="text">
+                <button class="btn text-bg-warning col-md-10" onclick="CreateCounter('CounterName')"><span class="h2">Create</span></button>
+                <button class="btn text-bg-info col-md-2" onclick="AddCounterToView()"><span class="h2">Add counter</span></button>
             </div>
         </div>
 

@@ -6,10 +6,14 @@ let CountersNumberOnTheView = 1;
 
 async function Counter()
 {
-    const res = await fetch(address + '/counters/customersCounter');
-    const data = await res.json();
-    const count = document.getElementById(`counter`);
-    count.textContent = data.value;
+    const data =await GetAllCounters();
+    Object.entries(data.counters).forEach(([key, value]) => {
+        const header = document.getElementById(key+"Key")
+        const counter = document.getElementById(key)
+
+        header.textContent = key;
+        counter.textContent = value;
+    });
 }
 
 async function ResetCounter(counterName)
@@ -49,17 +53,56 @@ async function GetAllCounters()
 {
     const res = await fetch(address + '/counters');
     const data = await res.json();
-    console.log(data);
+    return data;
 }
 
-async function AddCounterToView(counter)
+async function AddCounterToView()
 {
-   // await GetAllCounters();
-    let cardBody = document.getElementById('countersBody');
-    let counterElement = document.createElement('H5');
-    counterElement.textContent = counter.value;
-    counterElement.id = 'counter';
-    cardBody.appendChild(counterElement);
+    ClearView();
+
+    const data = await GetAllCounters();
+    Object.entries(data.counters).forEach(([key, value]) => {
+        let mainDiv = document.getElementById('MainDiv');
+        let cardBodyElement = document.createElement('div');
+        let cardHeaderElement = document.createElement('div');
+        let counterBodyElement = document.createElement('div');
+        let counterElement = document.createElement('h5');
+
+
+        cardBodyElement.classList.add('card');
+        cardBodyElement.classList.add('text-bg-primary');
+        cardBodyElement.classList.add('col-md-12');
+        cardBodyElement.classList.add('text-center');
+        cardBodyElement.id = key+'Card'
+
+        cardHeaderElement.classList.add('card-header');
+        cardHeaderElement.classList.add('h1');
+        cardHeaderElement.id = key+"Key";
+
+        counterBodyElement.classList.add('card-body');
+        counterBodyElement.classList.add('row');
+        counterBodyElement.classList.add('m-4');
+
+        counterElement.classList.add('h2');
+        counterElement.classList.add('text-center');
+        counterElement.textContent=0;
+        counterElement.id = key;
+
+
+        cardHeaderElement.appendChild(counterBodyElement);
+        cardBodyElement.appendChild(cardHeaderElement);
+        cardBodyElement.appendChild(counterElement);
+        mainDiv.appendChild(cardBodyElement);
+    });
+}
+
+async function ClearView()
+{
+    const data = await GetAllCounters();
+    Object.entries(data.counters).forEach(([key, value]) => {
+        let cardBodyElement = document.getElementById(key+'Card');
+        cardBodyElement.remove();
+    })
 }
 
 setInterval(Counter, 1000);
