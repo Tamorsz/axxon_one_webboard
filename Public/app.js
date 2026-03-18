@@ -4,6 +4,8 @@ let address = 'http://' + localhostAdd +':8100';
 
 let CountersNumberOnTheView = 1;
 
+let lastDataString="";
+
 document.addEventListener("DOMContentLoaded", () => { AddCounterToView(); });
 
 async function Counter()
@@ -69,42 +71,48 @@ async function GetAllCounters()
 
 async function AddCounterToView()
 {
-    ClearView();
 
     const data = await GetAllCounters();
-    Object.entries(data.counters).forEach(([key, value]) => {
-        let mainDiv = document.getElementById('MainDiv');
-        let cardBodyElement = document.createElement('div');
-        let cardHeaderElement = document.createElement('div');
-        let counterBodyElement = document.createElement('div');
-        let counterElement = document.createElement('h5');
+    const currentDataString = JSON.stringify(data);
+    console.log(currentDataString);
+    if (currentDataString !== lastDataString) {
+        lastDataString = currentDataString;
+        ClearView();
+
+        Object.entries(data.counters).forEach(([key, value]) => {
+            let mainDiv = document.getElementById('MainDiv');
+            let cardBodyElement = document.createElement('div');
+            let cardHeaderElement = document.createElement('div');
+            let counterBodyElement = document.createElement('div');
+            let counterElement = document.createElement('h5');
 
 
-        cardBodyElement.classList.add('card');
-        cardBodyElement.classList.add('text-bg-primary');
-        cardBodyElement.classList.add('col-md-12');
-        cardBodyElement.classList.add('text-center');
-        cardBodyElement.id = key+'Card'
+            cardBodyElement.classList.add('card');
+            cardBodyElement.classList.add('text-bg-primary');
+            cardBodyElement.classList.add('col-md-12');
+            cardBodyElement.classList.add('text-center');
+            cardBodyElement.id = key + 'Card'
 
-        cardHeaderElement.classList.add('card-header');
-        cardHeaderElement.classList.add('h1');
-        cardHeaderElement.id = key+"Key";
+            cardHeaderElement.classList.add('card-header');
+            cardHeaderElement.classList.add('h1');
+            cardHeaderElement.id = key + "Key";
 
-        counterBodyElement.classList.add('card-body');
-        counterBodyElement.classList.add('row');
-        counterBodyElement.classList.add('m-4');
+            counterBodyElement.classList.add('card-body');
+            counterBodyElement.classList.add('row');
+            counterBodyElement.classList.add('m-4');
 
-        counterElement.classList.add('h2');
-        counterElement.classList.add('text-center');
-        counterElement.textContent=0;
-        counterElement.id = key;
+            counterElement.classList.add('h2');
+            counterElement.classList.add('text-center');
+            counterElement.textContent = 0;
+            counterElement.id = key;
 
 
-        cardHeaderElement.appendChild(counterBodyElement);
-        cardBodyElement.appendChild(cardHeaderElement);
-        cardBodyElement.appendChild(counterElement);
-        mainDiv.appendChild(cardBodyElement);
-    });
+            cardHeaderElement.appendChild(counterBodyElement);
+            cardBodyElement.appendChild(cardHeaderElement);
+            cardBodyElement.appendChild(counterElement);
+            mainDiv.appendChild(cardBodyElement);
+        });
+    }
 }
 
 async function ClearView()
@@ -119,3 +127,4 @@ async function ClearView()
 }
 
 setInterval(Counter, 1000);
+setInterval(AddCounterToView, 2000);
