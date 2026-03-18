@@ -4,7 +4,7 @@ let address = 'http://' + localhostAdd +':8100';
 
 let CountersNumberOnTheView = 1;
 
-let lastDataString="";
+let lastDataString=[];
 
 document.addEventListener("DOMContentLoaded", () => { AddCounterToView(); });
 
@@ -73,9 +73,9 @@ async function AddCounterToView()
 {
 
     const data = await GetAllCounters();
-    const currentDataString = JSON.stringify(data);
-    console.log(currentDataString);
-    if (currentDataString !== lastDataString) {
+    let currentDataString=[];
+    Object.entries(data.counters).forEach(([key, value])=>{currentDataString.push(key)});
+    if (currentDataString.toString() !== lastDataString.toString()) {
         lastDataString = currentDataString;
         ClearView();
 
