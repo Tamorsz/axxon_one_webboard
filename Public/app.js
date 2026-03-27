@@ -88,10 +88,12 @@ async function AddCounterToView()
 
 
             cardBodyElement.classList.add('card');
-            if(value>0)
+            if(value>0) {
                 cardBodyElement.classList.add('card-bg-alarm');
-            else
+            }
+            else {
                 cardBodyElement.classList.add('card-bg');
+            }
             cardBodyElement.classList.add('col-md-12');
             cardBodyElement.classList.add('text-center');
             cardBodyElement.id = key + 'Card'
