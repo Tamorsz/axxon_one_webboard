@@ -1,0 +1,24 @@
+body {
+    font-family: Arial;
+    padding: 20px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    margin: 5px 0;
+    background: #f1f1f1;
+    padding: 8px;
+    border-radius: 6px;
+}
+
+div {
+    margin: 5px;
+}
+
+summary {
+    margin: 5px;
+}
