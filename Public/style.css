@@ -1,6 +1,7 @@
 body {
     font-family: Arial;
     padding: 20px;
+    background-color: #292929;
 }
 
 ul {
@@ -21,4 +22,25 @@ div {
 
 summary {
     margin: 5px;
+}
+
+.create-btn{
+    background-color: #335067;
+}
+
+.card-bg{
+    background-color: #335067;
+    color: #f1f1f1;
+}
+.card-bg:hover{
+
+}
+
+.card-bg-alarm{
+    background-color: #7D0B0B;
+    color: #f1f1f1;
+}
+
+.settings-btn{
+    background-color: transparent;
 }
