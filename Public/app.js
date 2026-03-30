@@ -10,13 +10,13 @@ document.addEventListener("DOMContentLoaded", () => { AddCounterToView(); });
 
 async function Counter()
 {
-    const data =await GetAllCounters();
-    Object.entries(data.counters).forEach(([key, value]) => {
+    const data = await GetAllCounters();
+    Object.entries(data).forEach(([key, body]) => {
         const header = document.getElementById(key+"Key")
         const counter = document.getElementById(key)
 
         header.textContent = key;
-        counter.textContent = value;
+        counter.textContent = body.value;
     });
 }
 
@@ -71,15 +71,17 @@ async function GetAllCounters()
 
 async function AddCounterToView()
 {
-
     const data = await GetAllCounters();
+
     let currentDataString=[];
-    Object.entries(data.counters).forEach(([key, value])=>{currentDataString.push(key)});
+    Object.entries(data).forEach(([key, body])=>{currentDataString.push(key)});
+
     if (currentDataString.toString() !== lastDataString.toString()) {
         lastDataString = currentDataString;
         ClearView();
 
-        Object.entries(data.counters).forEach(([key, value]) => {
+        Object.entries(data).forEach(([key, body]) => {
+            console.log(body.value);
             let mainDiv = document.getElementById('MainDiv');
             let cardBodyElement = document.createElement('div');
             let cardHeaderElement = document.createElement('div');
@@ -88,7 +90,7 @@ async function AddCounterToView()
 
 
             cardBodyElement.classList.add('card');
-            if(value>0) {
+            if(body.value>1) {
                 cardBodyElement.classList.add('card-bg-alarm');
             }
             else {
@@ -127,7 +129,7 @@ async function ClearView()
     // Csak a generált kártyákat töröljük, a "Számlálók szerkesztése" részt NE!
     // Ehhez érdemes a generált kártyáknak egy külön konténert adni a HTML-ben,
     // vagy csak azokat a gyerekeket törölni, amiknek van 'card' osztálya.
-    const cards = mainDiv.querySelectorAll('.card.text-bg-primary');
+    const cards = mainDiv.querySelectorAll('.card');
     cards.forEach(card => card.remove());
 }
 

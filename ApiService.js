@@ -10,10 +10,33 @@ app.use(cors());
 app.use(express.json());
 const CountersJsonPath = path.join(__dirname, 'counters.json');
 
+class CounterClass
+{
+    constructor(name, value = 0, limit = 0) {
+        this.name = name;
+        this.value = value;
+        this.limit = limit;
+    }
+
+    updateValue(newValue)
+    {
+        this.value = newValue;
+    }
+
+    updateLimit(newLimit)
+    {
+        this.limit = newLimit;
+    }
+}
+
 let counters = {};
 if(fs.existsSync(CountersJsonPath)) {
-    const data = fs.readFileSync(CountersJsonPath, 'utf8');
-    counters = JSON.parse(data);
+    const data =JSON.parse( fs.readFileSync(CountersJsonPath, 'utf8'));
+    for(let key in data)
+    {
+        const c = data[key];
+        counters[key] = new CounterClass(c.name,c.value,c.limit);
+    }
 }
 
 function saveCounters() {
@@ -21,30 +44,40 @@ function saveCounters() {
 }
 
 
+
 app.post('/counters/create/:name', (req, res) => {
     const name = req.params.name;
-    if(counters[name] !== undefined)
+
+    if(counters[name] === undefined)
     {
-        res.json({success : true});
+        counters[name] = new CounterClass(name);
+        saveCounters();
+        res.json({success : true, counter: counters[name]});
     }
     else
     {
-        counters[name] = 0;
-        saveCounters();
-        res.json({success : true});
+        res.status(400).json({success: false, message: 'Counter already exists'});
 
     }
 });
 
 // Gives back the current value of customersCounter
 app.get('/counters',(req, res) => {
-    res.json({counters});
+    res.json(counters);
 });
 
 // Gives back the current value of customersCounter
 app.get('/counters/:name',(req, res) => {
     const name = req.params.name;
-    res.json({name,value: counters[name]});
+    const counter = counters[name];
+    if(counter)
+    {
+        res.json(counter);
+    }
+    else
+    {
+        res.status(404).json({success: false, message: 'Counter does not exist'});
+    }
 });
 
 // Delete counter
@@ -62,41 +95,77 @@ app.delete('/counters/delete/:name', (req, res) => {
 // Increase 1 to the customersCounter
 app.post('/increasecounter/:name', (req, res) => {
     const name = req.params.name;
-    counters[name]++;
-    saveCounters();
-    res.json({success: true,value: counters[name]});
+    if(counters[name])
+    {
+        counters[name].value++;
+        saveCounters();
+        res.json({success: true, value: counters[name].value});
+    }
+    else
+    {
+        res.status(404).send();
+    }
+
 });
 
 // Increase 1 to the customersCounter
 app.get('/increasecounter/:name', (req, res) => {
     const name = req.params.name;
-    counters[name]++;
-    saveCounters();
-    res.json({success: true,value: counters[name]});
+    if(counters[name])
+    {
+        counters[name].value++;
+        saveCounters();
+        res.json({success: true, value: counters[name].value});
+    }
+    else
+    {
+        res.status(404).send();
+    }
 });
 
 // Decrease 1 to the customersCounter
 app.post('/decreasecounter/:name', (req, res) => {
     const name = req.params.name;
-    counters[name]--;
-    saveCounters();
-    res.json({success: true,value: counters[name]});
+    if(counters[name])
+    {
+        counters[name].value--;
+        saveCounters();
+        res.json({success: true, value: counters[name].value});
+    }
+    else
+    {
+        res.status(404).send();
+    }
 });
 
 // Decrease 1 to the customersCounter
 app.get('/decreasecounter/:name', (req, res) => {
     const name = req.params.name;
-    counters[name]--;
-    saveCounters();
-    res.json({success: true,value: counters[name]});
+    if(counters[name])
+    {
+        counters[name].value--;
+        saveCounters();
+        res.json({success: true, value: counters[name].value});
+    }
+    else
+    {
+        res.status(404).send();
+    }
 });
 
 // Set the customersCounter to 0
 app.post('/reset/:name', (req, res) => {
     const name = req.params.name;
-    counters[name] = 0;
-    saveCounters();
-    res.json({value: counters[name]});
+    if(counters[name])
+    {
+        counters[name].value = 0;
+        saveCounters();
+        res.json({success: true, value: counters[name].value});
+    }
+    else
+    {
+        res.status(404).send();
+    }
 });
 
 // statikus fájlok (ha van public/)
