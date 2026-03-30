@@ -6,5 +6,10 @@
   "asdf": {
     "value": 2,
     "limit": 0
+  },
+  "asd": {
+    "name": "asd",
+    "value": 2,
+    "limit": 0
   }
 }

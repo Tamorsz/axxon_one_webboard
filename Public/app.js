@@ -87,10 +87,39 @@ async function AddCounterToView()
             let cardHeaderElement = document.createElement('div');
             let counterBodyElement = document.createElement('div');
             let counterElement = document.createElement('h5');
+            let settingsElement = document.createElement('div');
+            let counterSettings = document.createElement('summary');
+            let settingsImg = document.createElement('img');
+            let settingsDetails = document.createElement('details');
+            let limitInput = document.createElement('input');
+            let limitButton = document.createElement('button');
+            let limitLabel = document.createElement('label');
 
+
+            limitLabel.textContent = 'Set limit to: ';
+            limitLabel.classList.add('limit-label');
+            limitButton.textContent = 'Submit';
+            limitButton.classList.add('btn');
+            limitButton.classList.add('submit-btn');
+
+            limitInput.type = 'number';
+            limitInput.value = body.limit;
+
+            settingsElement.appendChild(limitLabel);
+            settingsElement.appendChild(limitInput);
+            settingsElement.appendChild(limitButton);
+
+            settingsImg.src="../Resources/Pictures/Icons/settings_icon.png"
+
+            counterSettings.classList.add('btn');
+            counterSettings.style.scale='0.5';
+            counterSettings.appendChild(settingsImg);
+
+            settingsDetails.appendChild(counterSettings);
+            settingsDetails.appendChild(settingsElement);
 
             cardBodyElement.classList.add('card');
-            if(body.value>1) {
+            if(body.value>body.limit) {
                 cardBodyElement.classList.add('card-bg-alarm');
             }
             else {
@@ -105,11 +134,13 @@ async function AddCounterToView()
             cardHeaderElement.id = key + "Key";
 
             counterBodyElement.classList.add('card-body');
+            counterBodyElement.classList.add('container');
             counterBodyElement.classList.add('row');
             counterBodyElement.classList.add('m-4');
 
             counterElement.classList.add('h2');
             counterElement.classList.add('text-center');
+
             counterElement.textContent = 0;
             counterElement.id = key;
 
@@ -117,6 +148,7 @@ async function AddCounterToView()
             cardHeaderElement.appendChild(counterBodyElement);
             cardBodyElement.appendChild(cardHeaderElement);
             cardBodyElement.appendChild(counterElement);
+            cardBodyElement.appendChild(settingsDetails);
             mainDiv.appendChild(cardBodyElement);
         });
     }
@@ -135,3 +167,4 @@ async function ClearView()
 
 setInterval(Counter, 1000);
 setInterval(AddCounterToView, 2000);
+
