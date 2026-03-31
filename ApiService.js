@@ -12,20 +12,11 @@ const CountersJsonPath = path.join(__dirname, 'counters.json');
 
 class CounterClass
 {
-    constructor(name, value = 0, limit = 0) {
+    constructor(name, value = 0, limit = 0, operation = 'nan') {
         this.name = name;
         this.value = value;
         this.limit = limit;
-    }
-
-    updateValue(newValue)
-    {
-        this.value = newValue;
-    }
-
-    updateLimit(newLimit)
-    {
-        this.limit = newLimit;
+        this.operation = operation;
     }
 }
 
@@ -35,7 +26,7 @@ if(fs.existsSync(CountersJsonPath)) {
     for(let key in data)
     {
         const c = data[key];
-        counters[key] = new CounterClass(c.name,c.value,c.limit);
+        counters[key] = new CounterClass(c.name,c.value,c.limit,c.operation);
     }
 }
 
@@ -168,12 +159,14 @@ app.post('/reset/:name', (req, res) => {
     }
 });
 
-app.post('/setlimit/:name/:limit', (req, res) => {
+app.post('/setlimit/:name/:limit/:operation', (req, res) => {
     const name = req.params.name;
     const newLimit = parseInt(req.params.limit);
+    const newOperation = req.params.operation;
     if(counters[name])
     {
         counters[name].limit = newLimit;
+        counters[name].operation = newOperation;
         saveCounters();
         res.json({success: true, value: counters[name].limit});
     }

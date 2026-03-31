@@ -72,8 +72,10 @@ async function GetAllCounters()
 async function SubmitLimit(id)
 {
     let currentLimit = document.getElementById(id+'limit');
+    let currentOperation = document.getElementById(id+'operation');
+    let opForLink = currentOperation.options[currentOperation.selectedIndex].value;
     let name = id;
-    const res = await fetch(address + '/setlimit/' +name+'/'+ currentLimit.value, {method: 'POST'});
+    const res = await fetch(address + '/setlimit/' +name+'/'+ currentLimit.value+'/'+opForLink, {method: 'POST'});
 
     await AddCounterToView();
 }
@@ -83,7 +85,7 @@ async function AddCounterToView()
     const data = await GetAllCounters();
 
     let currentDataString=[];
-    Object.entries(data).forEach(([key, body])=>{currentDataString.push(key+body.limit)});
+    Object.entries(data).forEach(([key, body])=>{currentDataString.push(key+body.limit+body.operation);});
 
     if (currentDataString.toString() !== lastDataString.toString()) {
         lastDataString = currentDataString;
@@ -103,9 +105,20 @@ async function AddCounterToView()
             let limitInput = document.createElement('input');
             let limitButton = document.createElement('button');
             let limitLabel = document.createElement('label');
+            let limitOperation = document.createElement('select');
+            let operations = ['nan','>','<','==','>=','<=','!=']
+            for(i in operations)
+            {
+                let limitOperationOptions = document.createElement('option');
+                limitOperationOptions.textContent = operations[i];
+                limitOperationOptions.value = operations[i];
+                limitOperation.appendChild(limitOperationOptions);
+                console.log(body.operation);
+            }
+            limitOperation.value = body.operation;
 
-
-            limitLabel.textContent = 'Set limit to: ';
+            limitOperation.id=key+'operation';
+            limitLabel.textContent = 'Alarm when value';
             limitLabel.classList.add('limit-label');
             limitButton.textContent = 'Submit';
             limitButton.classList.add('btn');
@@ -117,6 +130,7 @@ async function AddCounterToView()
             limitInput.id = key + 'limit';
 
             settingsElement.appendChild(limitLabel);
+            settingsElement.appendChild(limitOperation);
             settingsElement.appendChild(limitInput);
             settingsElement.appendChild(limitButton);
 
@@ -130,7 +144,7 @@ async function AddCounterToView()
             settingsDetails.appendChild(settingsElement);
 
             cardBodyElement.classList.add('card');
-            if(body.value>body.limit) {
+            if(IsAlarm(body)) {
                 cardBodyElement.classList.add('card-bg-alarm');
             }
             else {
@@ -162,6 +176,19 @@ async function AddCounterToView()
             cardBodyElement.appendChild(settingsDetails);
             mainDiv.appendChild(cardBodyElement);
         });
+    }
+}
+
+function IsAlarm(body)
+{
+    switch(body.operation) {
+        case '>':  return body.value > body.limit;
+        case '<':  return body.value < body.limit;
+        case '==': return body.value == body.limit;
+        case '>=': return body.value >= body.limit;
+        case '<=': return body.value <= body.limit;
+        case '!=': return body.value != body.limit;
+        default:   return false; // 'nan' vagy ismeretlen esetén
     }
 }
 

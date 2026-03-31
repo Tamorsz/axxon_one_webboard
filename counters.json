@@ -2,11 +2,13 @@
   "asd": {
     "name": "asd",
     "value": 2,
-    "limit": 2
+    "limit": 2,
+    "operation": "nan"
   },
   "customersCounter": {
     "name": "customersCounter",
     "value": 0,
-    "limit": 0
+    "limit": 0,
+    "operation": "nan"
   }
 }
