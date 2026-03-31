@@ -134,7 +134,7 @@ async function AddCounterToView()
             settingsElement.appendChild(limitInput);
             settingsElement.appendChild(limitButton);
 
-            settingsImg.src="../Resources/Pictures/Icons/settings_icon.png"
+            settingsImg.src="Resources/Pictures/Icons/settings_icon.png"
 
             counterSettings.classList.add('btn');
             counterSettings.style.scale='0.5';
