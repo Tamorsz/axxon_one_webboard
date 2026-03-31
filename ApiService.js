@@ -168,6 +168,21 @@ app.post('/reset/:name', (req, res) => {
     }
 });
 
+app.post('/setlimit/:name/:limit', (req, res) => {
+    const name = req.params.name;
+    const newLimit = parseInt(req.params.limit);
+    if(counters[name])
+    {
+        counters[name].limit = newLimit;
+        saveCounters();
+        res.json({success: true, value: counters[name].limit});
+    }
+    else
+    {
+        res.status(404).send();
+    }
+});
+
 // statikus fájlok (ha van public/)
 app.use(express.static('public'));
 

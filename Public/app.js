@@ -69,12 +69,21 @@ async function GetAllCounters()
     return data;
 }
 
+async function SubmitLimit(id)
+{
+    let currentLimit = document.getElementById(id+'limit');
+    let name = id;
+    const res = await fetch(address + '/setlimit/' +name+'/'+ currentLimit.value, {method: 'POST'});
+
+    await AddCounterToView();
+}
+
 async function AddCounterToView()
 {
     const data = await GetAllCounters();
 
     let currentDataString=[];
-    Object.entries(data).forEach(([key, body])=>{currentDataString.push(key)});
+    Object.entries(data).forEach(([key, body])=>{currentDataString.push(key+body.limit)});
 
     if (currentDataString.toString() !== lastDataString.toString()) {
         lastDataString = currentDataString;
@@ -101,9 +110,11 @@ async function AddCounterToView()
             limitButton.textContent = 'Submit';
             limitButton.classList.add('btn');
             limitButton.classList.add('submit-btn');
+            limitButton.onclick = () => SubmitLimit(key);
 
             limitInput.type = 'number';
             limitInput.value = body.limit;
+            limitInput.id = key + 'limit';
 
             settingsElement.appendChild(limitLabel);
             settingsElement.appendChild(limitInput);
