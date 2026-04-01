@@ -95,104 +95,125 @@ async function AddCounterToView()
         ClearView();
 
         Object.entries(data).forEach(([key, body]) => {
-            console.log(body.value);
             let mainDiv = document.getElementById('MainDiv');
-            let cardBodyElement = document.createElement('div');
-            let cardHeaderElement = document.createElement('div');
-            let counterBodyElement = document.createElement('div');
-            let counterElement = document.createElement('h5');
-            let settingsElement = document.createElement('div');
-            let counterSettings = document.createElement('summary');
-            let settingsImg = document.createElement('img');
-            let settingsDetails = document.createElement('details');
-            let limitInput = document.createElement('input');
-            let limitButton = document.createElement('button');
-            let limitLabel = document.createElement('label');
-            let limitOperation = document.createElement('select');
-            let headerTable = document.createElement('table');
-            let headerTableRow = document.createElement('tr');
-            let headerTableCell0 = document.createElement('th');
-            let headerTableCell1 = document.createElement('th');
-            let headerTableCell2 = document.createElement('th');
 
-            let operations = ['nan','>','<','==','>=','<=','!=']
-            for(i in operations)
-            {
-                let limitOperationOptions = document.createElement('option');
-                limitOperationOptions.textContent = operations[i];
-                limitOperationOptions.value = operations[i];
-                limitOperation.appendChild(limitOperationOptions);
-                console.log(body.operation);
-            }
-            limitOperation.value = body.operation;
+            let cardBodyElement = CounterCardCreation(key,body)
 
-            limitOperation.id=key+'operation';
-            limitLabel.textContent = 'Alarm when value';
-            limitLabel.classList.add('limit-label');
-            limitButton.textContent = 'Submit';
-            limitButton.classList.add('btn');
-            limitButton.classList.add('submit-btn');
-            limitButton.onclick = () => SubmitLimit(key);
-
-            limitInput.type = 'number';
-            limitInput.value = body.limit;
-            limitInput.id = key + 'limit';
-
-            settingsElement.appendChild(limitLabel);
-            settingsElement.appendChild(limitOperation);
-            settingsElement.appendChild(limitInput);
-            settingsElement.appendChild(limitButton);
-
-            settingsImg.src="Resources/Pictures/Icons/settings_icon.png"
-
-            counterSettings.classList.add('btn');
-            counterSettings.style.scale='0.5';
-            counterSettings.appendChild(settingsImg);
-
-            settingsDetails.appendChild(counterSettings);
-            settingsDetails.appendChild(settingsElement);
-
-            cardBodyElement.classList.add('card');
-            if(IsAlarm(body)) {
-                cardBodyElement.classList.add('card-bg-alarm');
-            }
-            else {
-                cardBodyElement.classList.add('card-bg');
-            }
-            cardBodyElement.classList.add('col-md-12');
-            cardBodyElement.classList.add('text-center');
-            cardBodyElement.id = key + 'Card'
-
-            cardHeaderElement.classList.add('card-header');
-            cardHeaderElement.classList.add('h1');
-            cardHeaderElement.id = key + "Key";
-
-            counterBodyElement.classList.add('card-body');
-            counterBodyElement.classList.add('container');
-            counterBodyElement.classList.add('row');
-            counterBodyElement.classList.add('m-4');
-
-            counterElement.classList.add('h2');
-            counterElement.classList.add('text-center');
-
-            counterElement.textContent = 0;
-            counterElement.id = key;
-
-            headerTableRow.appendChild(headerTableCell0);
-            headerTableCell1.appendChild(cardHeaderElement)
-            headerTableRow.appendChild(headerTableCell1);
-            headerTableCell2.appendChild(settingsDetails)
-            headerTableRow.appendChild(headerTableCell2);
-            headerTable.appendChild(headerTableRow);
-            headerTableRow.classList.add('header-row');
-
-            cardHeaderElement.appendChild(counterBodyElement);
-            cardBodyElement.appendChild(headerTable);
-            cardBodyElement.appendChild(counterElement);
+            cardBodyElement.appendChild(CardHeaderCreation(key,body));
+            cardBodyElement.appendChild(CounterDisplayCreation(key));
             mainDiv.appendChild(cardBodyElement);
         });
     }
 }
+
+function CounterCardCreation(key,body)
+{
+    let counterCard = document.createElement('div');
+    counterCard.classList.add('card');
+    if(IsAlarm(body)) {
+        counterCard.classList.add('card-bg-alarm');
+    }
+    else {
+        counterCard.classList.add('card-bg');
+    }
+    counterCard.classList.add('col-md-12');
+    counterCard.classList.add('text-center');
+    counterCard.id = key + 'Card'
+    return counterCard;
+}
+
+function CounterDisplayCreation(key)
+{
+    let counterDisplay = document.createElement('H5');
+    counterDisplay.classList.add('h2');
+    counterDisplay.classList.add('text-center');
+    counterDisplay.textContent = 0;
+    counterDisplay.id = key;
+    return counterDisplay;
+}
+
+function CardHeaderCreation(key,body)
+{
+    let cardHearder = document.createElement('table');
+
+    let headerTableRow = document.createElement('tr');
+    let headerTableCell0 = document.createElement('th');
+    let headerTableCell1 = document.createElement('th');
+    let headerTableCell2 = document.createElement('th');
+
+    let cardHeaderElement = document.createElement('div');
+
+    cardHeaderElement.classList.add('card-header');
+    cardHeaderElement.classList.add('h1');
+    cardHeaderElement.id = key + "Key";
+
+
+    headerTableRow.appendChild(headerTableCell0);
+    headerTableCell1.appendChild(cardHeaderElement)
+    headerTableRow.appendChild(headerTableCell1);
+    headerTableCell2.appendChild(CounterSettingsCreation(key,body))
+    headerTableRow.appendChild(headerTableCell2);
+    headerTableRow.classList.add('header-row');
+    cardHearder.appendChild(headerTableRow);
+
+    return cardHearder;
+}
+
+function CounterSettingsCreation(key,body)
+{
+    let settingsDetails = document.createElement('details');
+
+    let limitOperation = document.createElement('select');
+    let limitInput = document.createElement('input');
+    let limitButton = document.createElement('button');
+    let limitLabel = document.createElement('label');
+
+    let counterSettings = document.createElement('summary');
+    let settingsElement = document.createElement('div');
+    let settingsImg = document.createElement('img');
+
+    let operations = ['nan','>','<','==','>=','<=','!=']
+    for(i in operations)
+    {
+        let limitOperationOptions = document.createElement('option');
+        limitOperationOptions.textContent = operations[i];
+        limitOperationOptions.value = operations[i];
+        limitOperation.appendChild(limitOperationOptions);
+        console.log(body.operation);
+    }
+    limitOperation.value = body.operation;
+
+    limitOperation.id=key+'operation';
+    limitLabel.textContent = 'Alarm when value';
+    limitLabel.classList.add('limit-label');
+    limitButton.textContent = 'Submit';
+    limitButton.classList.add('btn');
+    limitButton.classList.add('submit-btn');
+    limitButton.onclick = () => SubmitLimit(key);
+
+    limitInput.type = 'number';
+    limitInput.value = body.limit;
+    limitInput.id = key + 'limit';
+
+
+    settingsElement.appendChild(limitLabel);
+    settingsElement.appendChild(limitOperation);
+    settingsElement.appendChild(limitInput);
+    settingsElement.appendChild(limitButton);
+
+    settingsImg.src="Resources/Pictures/Icons/settings_icon.png"
+
+    counterSettings.classList.add('btn');
+    counterSettings.style.scale = '0.5';
+    counterSettings.appendChild(settingsImg);
+
+    settingsDetails.appendChild(counterSettings);
+    settingsDetails.appendChild(settingsElement);
+
+    return settingsDetails;
+}
+
+
 
 function IsAlarm(body)
 {
