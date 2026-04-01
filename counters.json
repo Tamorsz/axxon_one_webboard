@@ -1,9 +1,9 @@
 {
   "asd": {
     "name": "asd",
-    "value": 2,
-    "limit": 2,
-    "operation": "nan"
+    "value": 16,
+    "limit": 4,
+    "operation": ">"
   },
   "customersCounter": {
     "name": "customersCounter",

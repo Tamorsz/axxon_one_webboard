@@ -85,7 +85,10 @@ async function AddCounterToView()
     const data = await GetAllCounters();
 
     let currentDataString=[];
-    Object.entries(data).forEach(([key, body])=>{currentDataString.push(key+body.limit+body.operation);});
+    Object.entries(data).forEach(([key, body])=>{
+
+        currentDataString.push(key+body.limit+body.operation+IsAlarm(body));
+    });
 
     if (currentDataString.toString() !== lastDataString.toString()) {
         lastDataString = currentDataString;
