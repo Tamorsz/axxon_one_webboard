@@ -2,7 +2,7 @@
   "asd": {
     "name": "asd",
     "value": 16,
-    "limit": 4,
+    "limit": 5,
     "operation": ">"
   },
   "customersCounter": {

@@ -32,7 +32,8 @@ async function ExportCounter(counterName)
     return;
 }
 
-async function IncreaseCounter(counterName) {
+async function IncreaseCounter(counterName)
+{
     const res = await fetch(address + `/increasecounter/${counterName}`, {method: 'POST'});
     const data = await res.json();
 }
@@ -101,6 +102,7 @@ async function AddCounterToView()
 
             cardBodyElement.appendChild(CardHeaderCreation(key,body));
             cardBodyElement.appendChild(CounterDisplayCreation(key));
+            cardBodyElement.appendChild(CounterSettingsCreation(key,body));
             mainDiv.appendChild(cardBodyElement);
         });
     }
@@ -151,7 +153,7 @@ function CardHeaderCreation(key,body)
     headerTableRow.appendChild(headerTableCell0);
     headerTableCell1.appendChild(cardHeaderElement)
     headerTableRow.appendChild(headerTableCell1);
-    headerTableCell2.appendChild(CounterSettingsCreation(key,body))
+    headerTableCell2.appendChild(CounterSettingsButton(key));
     headerTableRow.appendChild(headerTableCell2);
     headerTableRow.classList.add('header-row');
     cardHearder.appendChild(headerTableRow);
@@ -168,9 +170,7 @@ function CounterSettingsCreation(key,body)
     let limitButton = document.createElement('button');
     let limitLabel = document.createElement('label');
 
-    let counterSettings = document.createElement('summary');
     let settingsElement = document.createElement('div');
-    let settingsImg = document.createElement('img');
 
     let operations = ['nan','>','<','==','>=','<=','!=']
     for(i in operations)
@@ -201,18 +201,27 @@ function CounterSettingsCreation(key,body)
     settingsElement.appendChild(limitInput);
     settingsElement.appendChild(limitButton);
 
-    settingsImg.src="Resources/Pictures/Icons/settings_icon.png"
-
-    counterSettings.classList.add('btn');
-    counterSettings.style.scale = '0.5';
-    counterSettings.appendChild(settingsImg);
-
-    settingsDetails.appendChild(counterSettings);
+    settingsDetails.appendChild(document.createElement('summary'));
     settingsDetails.appendChild(settingsElement);
+    settingsDetails.id = key+'Settings-Details';
 
     return settingsDetails;
 }
 
+function CounterSettingsButton(key)
+{
+    let counterSettingsButton = document.createElement('img');
+    counterSettingsButton.src='Resources/Pictures/Icons/settings_icon.png'
+    counterSettingsButton.style.scale = '0.5';
+
+    counterSettingsButton.onclick = () => {
+        let details = document.getElementById(key+'Settings-Details');
+        console.log('asd');
+        details.open = !details.open;
+    };
+
+    return counterSettingsButton;
+}
 
 
 function IsAlarm(body)
