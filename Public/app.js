@@ -109,6 +109,12 @@ async function AddCounterToView()
             let limitButton = document.createElement('button');
             let limitLabel = document.createElement('label');
             let limitOperation = document.createElement('select');
+            let headerTable = document.createElement('table');
+            let headerTableRow = document.createElement('tr');
+            let headerTableCell0 = document.createElement('th');
+            let headerTableCell1 = document.createElement('th');
+            let headerTableCell2 = document.createElement('th');
+
             let operations = ['nan','>','<','==','>=','<=','!=']
             for(i in operations)
             {
@@ -172,11 +178,17 @@ async function AddCounterToView()
             counterElement.textContent = 0;
             counterElement.id = key;
 
+            headerTableRow.appendChild(headerTableCell0);
+            headerTableCell1.appendChild(cardHeaderElement)
+            headerTableRow.appendChild(headerTableCell1);
+            headerTableCell2.appendChild(settingsDetails)
+            headerTableRow.appendChild(headerTableCell2);
+            headerTable.appendChild(headerTableRow);
+            headerTableRow.classList.add('header-row');
 
             cardHeaderElement.appendChild(counterBodyElement);
-            cardBodyElement.appendChild(cardHeaderElement);
+            cardBodyElement.appendChild(headerTable);
             cardBodyElement.appendChild(counterElement);
-            cardBodyElement.appendChild(settingsDetails);
             mainDiv.appendChild(cardBodyElement);
         });
     }

@@ -59,3 +59,16 @@ summary {
     color: #f1f1f1;
     margin-right: 10px;
 }
+
+table{
+    width: 100%;
+    table-layout: fixed;
+}
+
+.header-row
+{
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr;
+    width: 100%;
+    vertical-align: top;
+}
