@@ -163,7 +163,7 @@ function CardHeaderCreation(key,body)
 
 function CounterSettingsCreation(key,body)
 {
-    let settingsDetails = document.createElement('details');
+    let settingsDetails = document.createElement('div');
 
     let limitOperation = document.createElement('select');
     let limitInput = document.createElement('input');
@@ -201,10 +201,9 @@ function CounterSettingsCreation(key,body)
     settingsElement.appendChild(limitInput);
     settingsElement.appendChild(limitButton);
 
-    settingsDetails.appendChild(document.createElement('summary'));
     settingsDetails.appendChild(settingsElement);
     settingsDetails.id = key+'Settings-Details';
-
+    settingsDetails.hidden = true;
     return settingsDetails;
 }
 
@@ -217,7 +216,7 @@ function CounterSettingsButton(key)
     counterSettingsButton.onclick = () => {
         let details = document.getElementById(key+'Settings-Details');
         console.log('asd');
-        details.open = !details.open;
+        details.hidden = !details.hidden;
     };
 
     return counterSettingsButton;
