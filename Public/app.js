@@ -48,18 +48,17 @@ async function DecreaseCounter(counterName)
     const data = await res.json();
 }
 
-async function CreateCounter()
+async function CreateCounter(counterName)
 {
     let name = document.getElementById('CounterName').value.trim();
-    const res = await fetch(address + '/counters/create/' + name, {method: 'POST'});
-    document.getElementById('CounterName').value = '';
+    const res = await fetch(address + '/counters/create/' + counterName, {method: 'POST'});
     await AddCounterToView();
 }
+
 async function DeleteCounter(counterName)
 {
-    let name = document.getElementById('CounterName').value.trim();
-    const res = await fetch(address + '/counters/delete/' + name, {method: 'DELETE'});
-    document.getElementById('CounterName').value = '';
+    console.log(counterName);
+    const res = await fetch(address + '/counters/delete/' + counterName, {method: 'DELETE'});
     await AddCounterToView();
 }
 
@@ -204,6 +203,10 @@ function CounterSettingsCreation(key,body)
     settingsDetails.appendChild(settingsElement);
     settingsDetails.id = key+'Settings-Details';
     settingsDetails.hidden = true;
+
+    settingsDetails.appendChild(CounterEditElements(key,body));
+
+
     return settingsDetails;
 }
 
@@ -234,6 +237,21 @@ function IsAlarm(body)
         case '!=': return body.value != body.limit;
         default:   return false; // 'nan' vagy ismeretlen esetén
     }
+}
+
+function CounterEditElements(key,body)
+{
+    let editDetails = document.createElement('div');
+    let deleteButton = document.createElement('button');
+    deleteButton.innerText = "Delete";
+    deleteButton.classList.add('btn');
+    deleteButton.classList.add('btn-danger');
+    console.log(body.name);
+    deleteButton.onclick = () => DeleteCounter(body.name);
+
+    editDetails.appendChild(deleteButton);
+    editDetails.id = key+'EditElements';
+    return editDetails;
 }
 
 async function ClearView()

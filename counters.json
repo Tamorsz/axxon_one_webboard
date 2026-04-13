@@ -1,14 +1,1 @@
-{
-  "asd": {
-    "name": "asd",
-    "value": 16,
-    "limit": 5,
-    "operation": ">"
-  },
-  "customersCounter": {
-    "name": "customersCounter",
-    "value": 0,
-    "limit": 0,
-    "operation": "nan"
-  }
-}
+{}
