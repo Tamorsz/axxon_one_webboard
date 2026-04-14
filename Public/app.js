@@ -6,6 +6,9 @@ let CountersNumberOnTheView = 1;
 
 let lastDataString=[];
 
+let isFirstLoad =false;
+
+
 document.addEventListener("DOMContentLoaded", () => { AddCounterToView(); });
 
 async function Counter()
@@ -48,10 +51,10 @@ async function DecreaseCounter(counterName)
     const data = await res.json();
 }
 
-async function CreateCounter(counterName)
+async function CreateCounter()
 {
     let name = document.getElementById('CounterName').value.trim();
-    const res = await fetch(address + '/counters/create/' + counterName, {method: 'POST'});
+    const res = await fetch(address + '/counters/create/' + name, {method: 'POST'});
     await AddCounterToView();
 }
 
@@ -82,6 +85,7 @@ async function SubmitLimit(id)
 
 async function AddCounterToView()
 {
+
     const data = await GetAllCounters();
 
     let currentDataString=[];
@@ -90,14 +94,21 @@ async function AddCounterToView()
         currentDataString.push(key+body.limit+body.operation+IsAlarm(body));
     });
 
+    let mainDiv = document.getElementById('MainDiv');
+    if(!isFirstLoad) {
+        mainDiv.appendChild(CounterCreatorCreation());
+        isFirstLoad = true;
+    }
+
     if (currentDataString.toString() !== lastDataString.toString()) {
         lastDataString = currentDataString;
         ClearView();
 
         Object.entries(data).forEach(([key, body]) => {
-            let mainDiv = document.getElementById('MainDiv');
 
             let cardBodyElement = CounterCardCreation(key,body)
+
+
 
             cardBodyElement.appendChild(CardHeaderCreation(key,body));
             cardBodyElement.appendChild(CounterDisplayCreation(key));
@@ -107,10 +118,73 @@ async function AddCounterToView()
     }
 }
 
+function CounterCreatorCreation()
+{
+    let addDiv = document.createElement('div');
+    addDiv.id = 'CounterCreatorCreationCard';
+    let plusImg = document.createElement('img');
+    plusImg.src='Resources/Pictures/Icons/plusSign.png';
+    plusImg.height=50;
+
+    let counterAdditionMenu = document.createElement('div');
+    counterAdditionMenu.id='counterAdditionMenu';
+    counterAdditionMenu.hidden=true;
+
+    plusImg.onclick=()=>{
+        counterAdditionMenu.hidden = !counterAdditionMenu.hidden;
+    }
+
+
+    let cardDiv = document.createElement('div');
+    cardDiv.classList.add('card');
+    cardDiv.classList.add('card-bg');
+    cardDiv.classList.add('col-md-4');
+    cardDiv.classList.add('text-center');
+
+    let cardHead = document.createElement('div');
+    cardHead.classList.add('card-header');
+    cardHead.classList.add('h1');
+    cardHead.innerText = 'New counter';
+
+    let cardBody = document.createElement('div');
+    cardBody.classList.add('card-body');
+    cardBody.classList.add('row');
+    cardBody.classList.add('m-4');
+
+    let cardInput = document.createElement('input');
+    cardInput.type='text';
+    cardInput.id='CounterName';
+
+    let createButton = document.createElement('button');
+    createButton.classList.add('btn');
+    createButton.classList.add('text-bg-warning');
+    createButton.innerText = 'Create';
+    createButton.onclick=()=>{
+        CreateCounter();
+        counterAdditionMenu.hidden=true;
+        cardInput.value = '';
+    }
+
+    cardBody.appendChild(cardInput);
+    cardBody.appendChild(createButton);
+
+
+    cardDiv.appendChild(cardHead);
+
+    cardDiv.appendChild(cardBody);
+    counterAdditionMenu.appendChild(cardDiv);
+
+    addDiv.appendChild(plusImg);
+    addDiv.appendChild(counterAdditionMenu);
+    return addDiv;
+
+}
+
 function CounterCardCreation(key,body)
 {
     let counterCard = document.createElement('div');
     counterCard.classList.add('card');
+    counterCard.classList.add('counter-card');
     if(IsAlarm(body)) {
         counterCard.classList.add('card-bg-alarm');
     }
@@ -214,7 +288,8 @@ function CounterSettingsButton(key)
 {
     let counterSettingsButton = document.createElement('img');
     counterSettingsButton.src='Resources/Pictures/Icons/settings_icon.png'
-    counterSettingsButton.style.scale = '0.5';
+    counterSettingsButton.height = 50;
+    counterSettingsButton.style.margin='10px';
 
     counterSettingsButton.onclick = () => {
         let details = document.getElementById(key+'Settings-Details');
@@ -261,7 +336,7 @@ async function ClearView()
     // Csak a generált kártyákat töröljük, a "Számlálók szerkesztése" részt NE!
     // Ehhez érdemes a generált kártyáknak egy külön konténert adni a HTML-ben,
     // vagy csak azokat a gyerekeket törölni, amiknek van 'card' osztálya.
-    const cards = mainDiv.querySelectorAll('.card');
+    const cards = mainDiv.querySelectorAll('.counter-card');
     cards.forEach(card => card.remove());
 }
 
