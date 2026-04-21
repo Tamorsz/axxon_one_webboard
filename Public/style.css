@@ -72,10 +72,19 @@ table{
     table-layout: fixed;
 }
 
-.header-row
-{
+.header-row{
     display: grid;
     grid-template-columns: 1fr 3fr 1fr;
     width: 100%;
     vertical-align: top;
+}
+
+.menuBarGrid{
+    display: grid;
+    grid-template-columns: 60px 60px;
+}
+
+.menuGrid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }

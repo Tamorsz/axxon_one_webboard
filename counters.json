@@ -1,1 +1,8 @@
-{}
+{
+  "fsd": {
+    "name": "fsd",
+    "value": 0,
+    "limit": 0,
+    "operation": "=="
+  }
+}

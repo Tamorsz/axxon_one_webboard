@@ -4,9 +4,9 @@ let address = 'http://' + localhostAdd +':8100';
 
 let CountersNumberOnTheView = 1;
 
-let lastDataString=[];
+let lastDataString = [];
 
-let isFirstLoad =false;
+let isFirstLoad = false;
 
 
 document.addEventListener("DOMContentLoaded", () => { AddCounterToView(); });
@@ -88,17 +88,29 @@ async function AddCounterToView()
 
     const data = await GetAllCounters();
 
+    let mainDiv = document.getElementById('MainDiv');
+    let menuBarGrid = document.createElement('div');
+    let menuGrid = document.createElement('div');
+    menuBarGrid.classList.add('menuBarGrid');
+    menuGrid.classList.add('menuGrid');
+
+    if(!isFirstLoad) {
+        menuBarGrid.appendChild(CounterCreatorButton());
+        menuBarGrid.appendChild(UserCardButton());
+        menuGrid.appendChild(CounterCreatorCreation());
+        menuGrid.appendChild(UserCardCreation());
+        mainDiv.appendChild(menuBarGrid);
+        mainDiv.appendChild(menuGrid);
+        isFirstLoad = true;
+    }
+
     let currentDataString=[];
     Object.entries(data).forEach(([key, body])=>{
 
         currentDataString.push(key+body.limit+body.operation+IsAlarm(body));
     });
 
-    let mainDiv = document.getElementById('MainDiv');
-    if(!isFirstLoad) {
-        mainDiv.appendChild(CounterCreatorCreation());
-        isFirstLoad = true;
-    }
+
 
     if (currentDataString.toString() !== lastDataString.toString()) {
         lastDataString = currentDataString;
@@ -122,23 +134,15 @@ function CounterCreatorCreation()
 {
     let addDiv = document.createElement('div');
     addDiv.id = 'CounterCreatorCreationCard';
-    let plusImg = document.createElement('img');
-    plusImg.src='Resources/Pictures/Icons/plusSign.png';
-    plusImg.height=50;
 
     let counterAdditionMenu = document.createElement('div');
     counterAdditionMenu.id='counterAdditionMenu';
     counterAdditionMenu.hidden=true;
 
-    plusImg.onclick=()=>{
-        counterAdditionMenu.hidden = !counterAdditionMenu.hidden;
-    }
-
 
     let cardDiv = document.createElement('div');
     cardDiv.classList.add('card');
     cardDiv.classList.add('card-bg');
-    cardDiv.classList.add('col-md-4');
     cardDiv.classList.add('text-center');
 
     let cardHead = document.createElement('div');
@@ -174,10 +178,90 @@ function CounterCreatorCreation()
     cardDiv.appendChild(cardBody);
     counterAdditionMenu.appendChild(cardDiv);
 
-    addDiv.appendChild(plusImg);
+    // addDiv.appendChild(plusImg);
     addDiv.appendChild(counterAdditionMenu);
     return addDiv;
 
+}
+
+function CounterCreatorButton()
+{
+    let addDiv = document.createElement('div');
+
+    let plusImg = document.createElement('img');
+    plusImg.src='Resources/Pictures/Icons/plusSign.png';
+    plusImg.height=50;
+    plusImg.width=50;
+    plusImg.onclick=()=>{
+        let counterAdditionMenu = document.getElementById('counterAdditionMenu');
+        counterAdditionMenu.hidden = !counterAdditionMenu.hidden;
+    }
+    addDiv.appendChild(plusImg);
+
+    // console.log(counterAdditionMenu.hidden)
+
+    return addDiv;
+}
+
+function UserCardCreation()
+{
+    let userDiv = document.createElement("div");
+    userDiv.id = 'UserCardCreationCard';
+    userDiv.hidden = true;
+
+    let cardDiv = document.createElement('div');
+    cardDiv.classList.add('card');
+    cardDiv.classList.add('card-bg');
+    cardDiv.classList.add('text-center');
+
+    let cardHead = document.createElement('div');
+    cardHead.classList.add('card-header');
+    cardHead.classList.add('h1');
+    cardHead.innerText = 'New counter';
+
+    let cardBody = document.createElement('div');
+    cardBody.classList.add('card-body');
+    cardBody.classList.add('row');
+    cardBody.classList.add('m-4');
+
+    let cardInput = document.createElement('input');
+    cardInput.type='text';
+    cardInput.id='CounterName';
+
+    let createButton = document.createElement('button');
+    createButton.classList.add('btn');
+    createButton.classList.add('text-bg-warning');
+    createButton.innerText = 'Create';
+
+
+    cardBody.appendChild(cardInput);
+    cardBody.appendChild(createButton);
+
+
+    cardDiv.appendChild(cardHead);
+
+    cardDiv.appendChild(cardBody);
+
+
+    userDiv.appendChild(cardDiv);
+    return userDiv;
+}
+
+function UserCardButton()
+{
+    let userDiv = document.createElement("div");
+    let userIcon = document.createElement('img');
+    userIcon.src='Resources/Pictures/Icons/userIcon.png';
+    userIcon.height=50;
+
+    userIcon.onclick=()=>{
+        let userCardMenu = document.getElementById('UserCardCreationCard');
+        userCardMenu.hidden = !userCardMenu.hidden;
+    }
+
+
+    userDiv.appendChild(userIcon);
+    return userDiv;
 }
 
 function CounterCardCreation(key,body)
@@ -257,7 +341,7 @@ function CounterSettingsCreation(key,body)
     limitOperation.value = body.operation;
 
     limitOperation.id=key+'operation';
-    limitLabel.textContent = 'Alarm when value';
+    limitLabel.textContent = 'Alarm if: ' + body.name;
     limitLabel.classList.add('limit-label');
     limitButton.textContent = 'Submit';
     limitButton.classList.add('btn');
