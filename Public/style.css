@@ -81,7 +81,8 @@ table{
 
 .menuBarGrid{
     display: grid;
-    grid-template-columns: 60px 60px;
+    grid-template-columns: 60px 60px 60px;
+    align-items: center;
 }
 
 .menuGrid{

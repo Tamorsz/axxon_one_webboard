@@ -105,8 +105,11 @@ async function AddCounterToView()
     if(!isFirstLoad) {
         menuBarGrid.appendChild(CounterCreatorButton());
         menuBarGrid.appendChild(UserCardButton());
+        menuBarGrid.appendChild(ExportAllCountersButtons());
         menuGrid.appendChild(CounterCreatorCreation());
+
         menuGrid.appendChild(UserCardCreation());
+
         mainDiv.appendChild(menuBarGrid);
         mainDiv.appendChild(menuGrid);
         isFirstLoad = true;
@@ -401,7 +404,6 @@ function CounterSettingsButton(key)
     return counterSettingsButton;
 }
 
-
 function IsAlarm(body)
 {
     switch(body.operation) {
@@ -429,6 +431,41 @@ function CounterEditElements(key,body)
     editDetails.id = key+'EditElements';
     return editDetails;
 }
+
+async function ExportAllCounters() {
+    let data = await GetAllCounters();
+    console.log(data);
+    let csvString = 'Counter name;Count'
+    Object.entries(data).forEach(([key, body]) => {
+        csvString += "\n" + key + ";" + body.value;
+    });
+    console.log(csvString);
+    return csvString;
+}
+
+function ExportAllCountersButtons()
+{
+    let counterSettingsButton = document.createElement('img');
+    counterSettingsButton.src='Resources/Pictures/Icons/saveToCsv.png'
+    counterSettingsButton.height = 50;
+    counterSettingsButton.onclick = async () => {
+        let d = new Date();
+        DownloadFile(await ExportAllCounters(), "All_counters_" + d.getFullYear() + '_' + d.getMonth() + '_' + d.getDate() + '_' + d.getHours() + '_' + d.getMinutes() + '_' + d.getSeconds());
+    };
+
+    return counterSettingsButton;
+}
+
+function DownloadFile(content, fileName) {
+    const blob = new Blob(["\ufeff" +content], { type: 'text/csv;charset=utf-8;' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName; // Itt javasolhatsz nevet
+    a.click();
+    window.URL.revokeObjectURL(url);
+}
+
 
 async function ClearView()
 {
