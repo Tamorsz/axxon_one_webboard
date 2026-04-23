@@ -86,5 +86,12 @@ table{
 
 .menuGrid{
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: auto;
+}
+
+.userCheckboxLabel{
+    font-family: Arial;
+    font-weight: bold;
+    color: #f1f1f1;
+    margin-bottom: 10px;
 }

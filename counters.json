@@ -1,8 +1,8 @@
 {
-  "fsd": {
-    "name": "fsd",
+  "asd": {
+    "name": "asd",
     "value": 0,
     "limit": 0,
-    "operation": "=="
+    "operation": "nan"
   }
 }

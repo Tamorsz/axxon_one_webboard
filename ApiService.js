@@ -9,6 +9,7 @@ const PORT = 8100;
 app.use(cors());
 app.use(express.json());
 const CountersJsonPath = path.join(__dirname, 'counters.json');
+const UsersJsonPath = path.join(__dirname, 'users.json');
 
 class CounterClass
 {
@@ -20,7 +21,21 @@ class CounterClass
     }
 }
 
+class UserClass
+{
+    constructor(username, password, accessLevel = 0) {
+        this.username = username;
+        this.password = password;
+        this.accessLevel = accessLevel;
+    }
+}
+
 let counters = {};
+
+let users = {};
+
+let loggedUser;
+
 if(fs.existsSync(CountersJsonPath)) {
     const data =JSON.parse( fs.readFileSync(CountersJsonPath, 'utf8'));
     for(let key in data)
@@ -30,11 +45,20 @@ if(fs.existsSync(CountersJsonPath)) {
     }
 }
 
+if(fs.existsSync(UsersJsonPath)) {
+    const data =JSON.parse( fs.readFileSync(UsersJsonPath, 'utf8'));
+    for(let key in data)
+    {
+        const c = data[key];
+        users[key] = new UserClass(c.username, c.password, c.accessLevel);
+    }
+}
+
 function saveCounters() {
     fs.writeFileSync(CountersJsonPath, JSON.stringify(counters, null, 2));
 }
 
-
+//--------- COUNTERS ----------
 
 app.post('/counters/create/:name', (req, res) => {
     const name = req.params.name;
@@ -48,7 +72,6 @@ app.post('/counters/create/:name', (req, res) => {
     else
     {
         res.status(400).json({success: false, message: 'Counter already exists'});
-
     }
 });
 
@@ -175,6 +198,47 @@ app.post('/setlimit/:name/:limit/:operation', (req, res) => {
         res.status(404).send();
     }
 });
+
+
+//-------- USERS ---------
+app.get('/users', (req, res) => {
+    res.json(users);
+});
+
+app.post('/users/create/:username/:password/:accessLevel', (req, res) => {
+    let username = req.params.username;
+    let password = req.params.password;
+    let accessLevel = req.params.accessLevel;
+
+    if(users[username] === undefined)
+    {
+        users[username] = new UserClass(username, password, accessLevel);
+        saveUsers();
+        res.json({success: true, value: users[name].value});
+    }
+});
+
+app.post('/users/login/:username/:password', (req, res) => {
+    let username = req.params.username;
+    let password = req.params.password;
+    if(users[username] !== undefined)
+    {
+        if(users[username].password === password)
+        {
+            loggedUser = users[username];
+            res.json({success: true, value: users[username].value});
+        }
+    }
+});
+
+app.get('/users/current', (req, res) => {
+   res.json(loggedUser);
+});
+
+
+function saveUsers() {
+    fs.writeFileSync(UsersJsonPath, JSON.stringify(users, null, 2));
+}
 
 // statikus fájlok (ha van public/)
 app.use(express.static('public'));

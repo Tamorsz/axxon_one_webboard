@@ -8,6 +8,8 @@ let lastDataString = [];
 
 let isFirstLoad = false;
 
+let loggedIn = false;
+
 
 document.addEventListener("DOMContentLoaded", () => { AddCounterToView(); });
 
@@ -21,6 +23,7 @@ async function Counter()
         header.textContent = key;
         counter.textContent = body.value;
     });
+    loggedIn = document.getElementById("userCheckbox").checked;
 }
 
 async function ResetCounter(counterName)
@@ -58,6 +61,11 @@ async function CreateCounter()
     await AddCounterToView();
 }
 
+async function UserLogin(username, password)
+{
+    const res = await fetch(address + '/users/login/'+username+'/'+password, {method: 'POST'});
+}
+
 async function DeleteCounter(counterName)
 {
     console.log(counterName);
@@ -92,7 +100,7 @@ async function AddCounterToView()
     let menuBarGrid = document.createElement('div');
     let menuGrid = document.createElement('div');
     menuBarGrid.classList.add('menuBarGrid');
-    menuGrid.classList.add('menuGrid');
+    // menuGrid.classList.add('menuGrid');
 
     if(!isFirstLoad) {
         menuBarGrid.appendChild(CounterCreatorButton());
@@ -107,7 +115,7 @@ async function AddCounterToView()
     let currentDataString=[];
     Object.entries(data).forEach(([key, body])=>{
 
-        currentDataString.push(key+body.limit+body.operation+IsAlarm(body));
+        currentDataString.push(key+body.limit+body.operation+IsAlarm(body)+loggedIn);
     });
 
 
@@ -192,10 +200,14 @@ function CounterCreatorButton()
     plusImg.src='Resources/Pictures/Icons/plusSign.png';
     plusImg.height=50;
     plusImg.width=50;
-    plusImg.onclick=()=>{
+
+    plusImg.onclick = () => {
         let counterAdditionMenu = document.getElementById('counterAdditionMenu');
-        counterAdditionMenu.hidden = !counterAdditionMenu.hidden;
+        let userCardMenu = document.getElementById('UserCardCreationCard');
+        if(loggedIn) counterAdditionMenu.hidden = !counterAdditionMenu.hidden;
+        userCardMenu.hidden = true;
     }
+
     addDiv.appendChild(plusImg);
 
     // console.log(counterAdditionMenu.hidden)
@@ -217,33 +229,35 @@ function UserCardCreation()
     let cardHead = document.createElement('div');
     cardHead.classList.add('card-header');
     cardHead.classList.add('h1');
-    cardHead.innerText = 'New counter';
+    cardHead.innerText = 'User';
 
     let cardBody = document.createElement('div');
     cardBody.classList.add('card-body');
     cardBody.classList.add('row');
     cardBody.classList.add('m-4');
 
-    let cardInput = document.createElement('input');
-    cardInput.type='text';
-    cardInput.id='CounterName';
+    let userCheckbox = document.createElement('input');
+    userCheckbox.type='checkbox';
+    userCheckbox.id='userCheckbox';
+    userCheckbox.innerText = 'Administrator';
 
-    let createButton = document.createElement('button');
-    createButton.classList.add('btn');
-    createButton.classList.add('text-bg-warning');
-    createButton.innerText = 'Create';
+    let userCheckboxLabel = document.createElement('label');
+    userCheckboxLabel.classList.add('userCheckboxLabel');
+    userCheckboxLabel.innerText = 'Administrator';
+
+    if(!loggedIn) {
+        userCheckbox.checked=false;
+    }
 
 
-    cardBody.appendChild(cardInput);
-    cardBody.appendChild(createButton);
-
+    cardBody.appendChild(userCheckboxLabel);
+    cardBody.appendChild(userCheckbox);
 
     cardDiv.appendChild(cardHead);
-
     cardDiv.appendChild(cardBody);
 
-
     userDiv.appendChild(cardDiv);
+
     return userDiv;
 }
 
@@ -256,13 +270,16 @@ function UserCardButton()
 
     userIcon.onclick=()=>{
         let userCardMenu = document.getElementById('UserCardCreationCard');
+        let counterAdditionMenu = document.getElementById('counterAdditionMenu');
         userCardMenu.hidden = !userCardMenu.hidden;
+        counterAdditionMenu.hidden=true;
     }
 
 
     userDiv.appendChild(userIcon);
     return userDiv;
 }
+
 
 function CounterCardCreation(key,body)
 {
@@ -310,7 +327,7 @@ function CardHeaderCreation(key,body)
     headerTableRow.appendChild(headerTableCell0);
     headerTableCell1.appendChild(cardHeaderElement)
     headerTableRow.appendChild(headerTableCell1);
-    headerTableCell2.appendChild(CounterSettingsButton(key));
+    if(loggedIn) headerTableCell2.appendChild(CounterSettingsButton(key));
     headerTableRow.appendChild(headerTableCell2);
     headerTableRow.classList.add('header-row');
     cardHearder.appendChild(headerTableRow);
