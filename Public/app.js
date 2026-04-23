@@ -201,6 +201,7 @@ function CounterCreatorButton()
 
     let plusImg = document.createElement('img');
     plusImg.src='Resources/Pictures/Icons/plusSign.png';
+    plusImg.classList.add('clickable-img');
     plusImg.height=50;
     plusImg.width=50;
 
@@ -269,6 +270,7 @@ function UserCardButton()
     let userDiv = document.createElement("div");
     let userIcon = document.createElement('img');
     userIcon.src='Resources/Pictures/Icons/userIcon.png';
+    userIcon.classList.add('clickable-img');
     userIcon.height=50;
 
     userIcon.onclick=()=>{
@@ -392,6 +394,7 @@ function CounterSettingsButton(key)
 {
     let counterSettingsButton = document.createElement('img');
     counterSettingsButton.src='Resources/Pictures/Icons/settings_icon.png'
+    counterSettingsButton.classList.add('clickable-img');
     counterSettingsButton.height = 50;
     counterSettingsButton.style.margin='10px';
 
@@ -445,15 +448,16 @@ async function ExportAllCounters() {
 
 function ExportAllCountersButtons()
 {
-    let counterSettingsButton = document.createElement('img');
-    counterSettingsButton.src='Resources/Pictures/Icons/saveToCsv.png'
-    counterSettingsButton.height = 50;
-    counterSettingsButton.onclick = async () => {
+    let exportToCsvButton = document.createElement('img');
+    exportToCsvButton.src='Resources/Pictures/Icons/saveToCsv.png'
+    exportToCsvButton.classList.add('clickable-img');
+    exportToCsvButton.height = 50;
+    exportToCsvButton.onclick = async () => {
         let d = new Date();
         DownloadFile(await ExportAllCounters(), "All_counters_" + d.getFullYear() + '_' + d.getMonth() + '_' + d.getDate() + '_' + d.getHours() + '_' + d.getMinutes() + '_' + d.getSeconds());
     };
 
-    return counterSettingsButton;
+    return exportToCsvButton;
 }
 
 function DownloadFile(content, fileName) {

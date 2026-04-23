@@ -96,3 +96,8 @@ table{
     color: #f1f1f1;
     margin-bottom: 10px;
 }
+
+.clickable-img:active {
+    transform: scale(0.9);
+    filter: grayscale(100%);
+}
